@@ -18,7 +18,6 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     login(formData)
-
   }
 
   return (
@@ -88,7 +87,7 @@ const LoginPage = () => {
                 </button>
               </div>
             </div>
-            <button type='submit' className='btn btn-primary w-full' disabled={isLoggingIn}>
+            <button type='submit' className='btn mt-4 btn-primary w-full' disabled={isLoggingIn}>
               {isLoggingIn ? (
                 <>
                   <Loader2 className='size-5 animate-spin' />
@@ -105,6 +104,14 @@ const LoginPage = () => {
               Don't have an account?{" "}
               <Link to="/signup" className='link link-primary'>
                 Create account
+              </Link>
+            </p>
+          </div>
+          <div className='text-center'>
+            <p className="text-gray-500">
+              {" "}
+              <Link to="/reset" className='link link-primary'>
+                Forgot password?
               </Link>
             </p>
           </div>
