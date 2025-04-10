@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
-import { LogIn } from "lucide-react";
+import { AwardIcon, LogIn } from "lucide-react";
 import { io } from "socket.io-client";
 
 const BASE_URL = import.meta.env.MODE === "development"  ? "http://localhost:5001" : "/";
@@ -12,6 +12,8 @@ export const useAuthStore = create((set, get) => ({
   isLoggingIn: false,
   isUpdatingProfile: false,
   socket: null,
+
+  isResetPassword: false,
 
   isChechingAuth: true,
   onlineUsers: [],
@@ -30,10 +32,22 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
+  reset: async (data) =>{
+    set({isResetPassword: true})
+    try {
+      await axiosInstance.post("/auth/reset" , data)
+      toast.success("Password reset successfully")
+      set({authUser: null })
+    } catch (error) {
+      toast.error(error.response.data.message)
+    }finally{
+      set({ isResetPassword: false})
+    }
+
+  },
+
   signup: async (data) => {
     set({ isSigningUp : true });
-
-    set({ isSigningUp: true });
     try {
       const res = await axiosInstance.post("/auth/signup", data);
       set({ authUser: res.data });
