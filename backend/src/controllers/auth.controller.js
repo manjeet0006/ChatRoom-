@@ -87,6 +87,33 @@ export const login = async (req , res)=>{
 
     }
 }
+
+export const reset = async(req , res ) => {
+    const { email , password } = req.body
+    try {
+        const user = await User.findOne( {email} )
+        if(!user){
+            return res.status(400).json({message: "Invalid credentials"})
+        }
+
+        const userId = user._id
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedUpdatedPassword = await bcrypt.hash(password , salt) 
+        
+        
+        const updatedPassword = await User.findByIdAndUpdate(userId , {password: hashedUpdatedPassword} )
+
+
+        res.status(200).json(updatedPassword)
+
+    } catch (error) {
+        console.log("Error in reset controller", error.message)
+        res.status(500).json({ message: "Invalid Server Error"})
+
+    }
+}
+
 export const logout = (req , res)=>{
     try {
         res.cookie("jwt","" ,{maxAge:0});
